@@ -1,0 +1,15 @@
+# bebop parse service — runtime deps (see README.md for setup).
+# MinerU is installed separately (heavy, GPU): pip install "mineru>=3.4,<4"
+# into its own venv or this one, and point MINERU_BIN at the binary.
+pymupdf>=1.24
+fastapi>=0.110
+# FastAPI parses /parse's multipart upload with it; MinerU happens to pull
+# it in, but bebop must not depend on that.
+python-multipart>=0.0.18
+uvicorn>=0.29
+
+# The Prefect client, for the reader API key (a Secret block, not a file).
+prefect>=3.8,<4
+
+# dev / measurement
+pytest>=8
