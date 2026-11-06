@@ -1,5 +1,33 @@
 # bebop — the verified parser
 
+bebop is a PDF parser built to get tables out of financial documents without
+getting the numbers wrong. A vision model reads each table, then every cell is
+checked against the words printed on the page. A number that doesn't match gets
+one fresh read, and anything still unconfirmed is flagged instead of being passed
+along as data.
+
+Teemu Miller designed and built bebop, using Claude as an AI coding assistant, as
+the parser in an ETL pipeline for commercial real estate offering memoranda. It
+was extracted from Dovery's private repository and published here with
+permission, including some later changes by another contributor. This repository
+starts from a single fresh commit, so the original history isn't included.
+
+## Results
+
+On pages 1–3 of the Federal Reserve H.8 release (897 numbers), scored against the
+PDF's own text, bebop placed all 897 in the correct row and column. Docling 2.148.0
+on default settings placed 684.
+
+## Limits
+
+- bebop relies on the PDF's text layer. Every word in that layer is kept, but
+  scanned PDFs have no such guarantee.
+- Rotated pages keep their values but can lose table structure, with values
+  shipping as text instead of table cells.
+- Very dense or handwritten tables can still struggle. Those cells are flagged.
+
+## How it works
+
 Bebop turns a PDF into the four preprocess assets (`tables.json`, `doc.json`,
 `images.json`, markdown) plus an integrity ledger. It is an HTTP
 service, not a Python package: a self-contained tree with its own
